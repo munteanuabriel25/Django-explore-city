@@ -1,0 +1,188 @@
+{% extends parent_template|default:'blog/base_blog.html' %}
+{% load left_sidebar_blog %}
+{% load review_post_blog %}
+{% load static %}
+
+
+{% block left_sidebar %}
+<!--	here should implement a sidebar for blog app			-->
+		{% block left_sidebar_blog %}
+					{% left_sidebar_blog %}
+		{% endblock left_sidebar_blog %}
+
+<!--	here should implement a sidebar for blog app			-->
+{% endblock %}
+
+
+{% block blog_content %}
+<!------------------ extends loading base_blog html  ----------------------->
+<div class="right-side">
+	<div class="post-view">
+		<div class="post-container">
+			<div class="post-info flex-row">
+				<div class="post-date">
+					<p class="text-color-greydark text-xl text-align-center">{{ post.pub_date|date:'d'}}</p>
+					<p class="text-color-greydark text-ms text-align-center">{{ post.pub_date|date:'F'}}</p>
+					<p class="text-color-greydark text-ms text-align-center">{{ post.pub_date|date:'Y'}}</p>
+				</div>
+				<div class="post-title">
+					<p class="text-color-greydark text-md-xl mg-bt-1">{{ post.title }}</p>
+					<p class="text-color-greydark text-sm-bold">written by {{ post.user.userprofile.username }}</p>
+				</div>
+				<div class="post-social-media flex-column">
+						<a href="#" class="social-media-links text-sm-bold text-color-greydark">Facebook<i class="fab fa-facebook-f social-media-icon"></i></a>
+						<a href="#" class="social-media-links text-sm-bold text-color-greydark">Twitter<i class="fab fa-twitter social-media-icon"></i></a>
+						<a href="#" class="social-media-links text-sm-bold text-color-greydark">Youtube<i class="fab fa-youtube social-media-icon"></i></a>
+						<a href="#" class="social-media-links text-sm-bold text-color-greydark">Instagram<i class="fab fa-instagram social-media-icon"></i></a>
+				</div>
+				
+			</div>
+			<img class='post-picture' src="{{ post.picture.url }}">
+			<div class="post-content">
+				<p class="text-color-greydark text-ms spaced-lines-12"> {{ post.content }}</p>
+			</div>
+			<div class="post-detail">
+				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-comment-alt text-color-red"></i>  {{ post.number_comments }} comments </p>
+				<p  class="text-sm post-thumbnails text-color-greydark"><i class="far fa-clock text-color-red"></i> {{ post.last_updated|date:'d F Y - h:i A'}}  </p>
+				<p class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-thumbs-up text-color-red"></i> {{ post.number_likes }} likes  </p>
+				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-tags text-color-red"></i> {{ post.tags.all.count }} tags  </p>
+				<div class="flex-row">
+						{% for tag in post.tags.all %}
+						<a href="" class="small-btn">{{ tag.name }}</a>
+						{% endfor %}
+				</div>
+				{% block review_post_blog %}
+					{% check_status post user %}
+				{% endblock review_post_blog %}
+				
+			</div>
+		</div>
+		{% if update_comment_form %}
+			<div class="comment">
+				<div class="comment-container">
+					<div class="author-info">
+						<img class="auth-picture" src="{% static 'images/default_prof_pic.jpg' %}">
+					</div>
+					<div class="comment-info">
+						<div class="comment-info-flex">
+							<p class="text-color-grey text-sm">update your comment</p>
+							<p class="text-color-grey text-sm">{% now "d F Y - H:i A" %} </p>
+						</div>
+						<form method="POST" action="{{ comment.action_url}}">
+							{% csrf_token %}
+							{{ update_comment_form.content }}
+							<input type="hidden" name="perform" value="update">
+							<input type="submit" class="small-btn post-comment" value="UPDATE">
+						</form>
+						
+					</div>
+				
+				</div>
+			</div>
+		{% endif %}
+		
+		
+		{% for comment in post.get_comments %}
+			<div class="comment">
+				<div class="comment-container">
+					<div class="author-info">
+						<img class="auth-picture" src="{{ comment.user.userprofile.picture.url }}">
+					</div>
+					<div class="comment-info">
+						<div class="comment-info-flex">
+							<div class="flex-row">
+								<p class="text-color-grey text-sm">{{ comment.user.userprofile.username }}</p>
+								<p class="text-ss text-color-grey mg-lt-1">on {{ comment.pub_date|date:'d F Y - h:i A'}}</p>
+							</div>
+							
+							<p class="text-color-grey text-sm">{{ comment.time_since }} </p>
+							
+						</div>
+						<p class="text-color-greydark text-sm-bold mg-tp-05">{{ comment.content|rjust:"10" }} </p>
+					</div>
+				
+				</div>
+				<div class="comment-actions">
+					{% if user.is_authenticated %}
+						{% if comment.user == request.user %}
+							<form method="POST" action="{{ comment.action_url }}">
+								{% csrf_token %}
+								<input type="hidden" name="perform" value="delete">
+								<button  type="submit"   class="small-btn"><i class="fas fa-trash"></i> </button>
+							</form>
+							<a href="{{ comment.action_url }}" name="perform" class="small-btn"> <i class="far fa-edit"></i> </a>
+						{% else %}
+							<a href="" class="small-btn "> <i class="fas fa-exclamation-circle"></i> </a>
+							<a href="" class="small-btn"><i class="fas fa-thumbs-up"></i>  </a>
+						{% endif %}
+							<a href="" class="small-btn"><i class="fas fa-reply"></i> REPLY </a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+		
+		
+		
+		{% if user.is_authenticated %}
+			<div class="comment">
+				<div class="comment-container">
+					<div class="author-info">
+						<img class="auth-picture" src="{{ user.userprofile.picture.url }}">
+					</div>
+					<div class="comment-info">
+						<div class="comment-info-flex">
+							<p class="text-color-grey text-sm">post a new comment</p>
+							<p class="text-color-grey text-sm">{% now "d F Y - H:i A" %} </p>
+						</div>
+						<form method="POST">
+							{% csrf_token %}
+							{{ comment_form.content }}
+							<input type="submit" class="small-btn post-comment" value="POST">
+						</form>
+						
+					</div>
+				
+				</div>
+			</div>
+		{% endif %}
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+	
+	
+	
+	
+	<div class="author-view">
+		<div class="author-profile-container">
+			<img class="" src="{{ post.user.userprofile.picture.url }}">
+			<p class="mg-tp-2 text-color-greydark text-sm-bold"> Author description: </p>
+			<p class="mg-tp-05 text-color-greydark text-sm spaced-lines-12"> {{ post.user.userprofile.description }} </p>
+			<p class="mg-tp-2 text-color-greydark text-sm-bold"> Featured posts</p>
+			<hr class="line mg-tp-05">
+			{% if post.get_related != 'None' %}
+				{% for post in post.get_related %}
+				<a href="{{ post.get_absolute_url }}" class="mg-tp-05 text-color-greydark text-sm"><i class="fas fa-chevron-right  mg-rt-05"></i> {{ post.title }}</a>
+				{% endfor %}
+			{% else %}
+				<a href="" class="mg-tp-05 text-color-greydark text-sm"><i class="fas fa-chevron-right  mg-rt-05"></i> No related posts to show</a>
+			{% endif %}
+
+			<hr class="line mg-tp-05">
+			<div class="flex-row mg-tp-05">
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-twitter "></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-youtube "></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark"><i class="fab fa-instagram "></i></a>
+			 </div>
+		</div>
+	</div>
+	
+</div>
+<!------------------ ending  loading base_blog html  ----------------------->
+{% endblock %}

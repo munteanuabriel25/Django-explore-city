@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% load static %}
+
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Directone </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/base.css'%}">
+        <link rel="stylesheet" href="{% static 'css/all.css'%}">
+	    {% block page_css_load %}
+	    <!------------------------- extends loading css style local ------------------------->
+	    {% endblock %}
+
+
+    </head>
+    <body>
+       
+        <header class="header-index">
+            <div class="top-bar">
+                <div class="phone-info flex-row">
+                    <p class="text-sm text-color-red"><strong>Call:</strong></p>
+                    <p class="text-sm">   + 1 234 5678 910</p>
+                </div>
+                <div class="social-media-info flex-row">
+                    <a href="#" class="social-media-links text-sm text-color-grey"><i class="fab fa-facebook-f social-media-icon"></i>Facebook</a>
+                    <a href="#" class="social-media-links text-sm text-color-grey"><i class="fab fa-twitter social-media-icon"></i>Twitter</a>
+                    <a href="#" class="social-media-links text-sm text-color-grey"><i class="fab fa-youtube social-media-icon"></i>Youtube</a>
+                    <a href="#" class="social-media-links text-sm text-color-grey"><i class="fab fa-instagram social-media-icon"></i>Intagram</a>
+                </div>
+            </div>
+	   
+			{% for message in messages %}
+	            <p class="top-message">{{message}}<p>
+	        {% endfor %}
+            <div class="menu-bar">
+                <a href=""><img src="{% static 'images/logo.svg' %}"></a>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="{% url 'pages:home-view' %}" class="btn-nav">Home</a>
+                        </li>
+                        <li>
+                            <a href="#" class="btn-nav">About</a>
+                        </li>
+                        <li>
+                            <a href="" class="btn-nav">Listing</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'pages:blog:home-view' %}" class="btn-nav">Blog</a>
+                        </li>
+                        <li>
+                            <a href="#" class="btn-nav">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="log-container">
+	                {% if user.is_authenticated %}
+	                    <a href="{% url 'pages:user:user-profile' user.username %}"><img class="user-picture" src="{{ user.userprofile.picture.url }}"></a>
+	                    <a href="{% url 'pages:user:user-profile' user.username %}" class="text-color-grey text-ms"> Hello {{user.userprofile.username }}</a>
+	                    <a href="{% url 'pages:user:user-logout' %}" class="btn mg-lt-1">Log out</a>
+	                {% else %}
+	                    <a href="{% url 'pages:user:user-register' %}" class="btn mg-lt-1">Register</a>
+	                    <a href="{% url 'pages:user:user-login' %}" class="btn mg-lt-1">Log in</a>
+	                {% endif %}
+                </div>
+
+
+            </div>
+           
+	        {% block banner %}
+	        <!------------------------- extends loading specific banner content for each page  ------------------------->
+	        {% endblock banner %}
+	       
+         
+
+
+        </header>
+        
+        {% block content %}
+         <!------------------------- extends loading specific information for each page or app  ------------------------->
+        {% endblock content %}
+        
+        
+       
+        
+
+        <footer>
+            <div class="footer-container">
+                <div class="footer-description">
+                    <a href="#"><img src="{% static 'images/logo.svg' %}"></a>
+                    <br>
+                    <p class="text-ms text-color-grey">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                    <br>
+                    <div class="social-media-info flex-row">
+                        <a href="#" class="social-media-links text-ms text-color-grey"><i class="fab fa-facebook-f social-media-icon"></i>Facebook</a>
+                        <a href="#" class="social-media-links text-ms text-color-grey"><i class="fab fa-twitter social-media-icon"></i>Twitter</a>
+                        <br>
+                        <a href="#" class="social-media-links text-ms text-color-grey"><i class="fab fa-youtube social-media-icon"></i>Youtube</a>
+                        <a href="#" class="social-media-links text-ms text-color-grey"><i class="fab fa-instagram social-media-icon"></i>Intagram</a>
+                    </div>
+                </div>
+                <div class="footer-description">
+                    <p class="text-md text-color-grey">Explore</p>
+                    <br>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>About us </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Blog </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Contact </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Listing </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Pricing Packages</a>
+                </div>
+                <div class="footer-description">
+                    <p class="text-md text-color-grey">Quick Links</p>
+                    <br>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>About us </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Blog </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Contact </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Listing </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Pricing Packages</a>
+                </div>
+                <div class="footer-description">
+                    <p class="text-md text-color-grey">Categories</p>
+                    <br>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Food & Drinks </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Beauty </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Hotels </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Shopping </a>
+                    <a href="#" class="footer-links text-ms text-color-grey"><i class="fas fa-chevron-right mg-rt-1"></i>Fitness</a>
+                </div>
+                <div class="footer-description">
+                    <p class="text-md text-color-grey">Have a question ?</p>
+                    <br>
+                    <p class="text-color-grey text-ms"><i class="fas fa-map text-color-red mg-rt-1"></i>203 Fake St. Mountain View, San Francisco, California, USA</p>
+                    <br>
+                    <p class="text-color-grey text-ms"><i class="fas fa-phone-alt text-color-red mg-rt-1"></i>+2 392 3929 210</p>
+                    <br>
+                    <p class="text-color-grey text-ms"><i class="fas fa-envelope text-color-red mg-rt-1"></i>info@directone.com</p>
+                </div>
+            </div>
+        </footer>
+
+
+
+
+
+        <script src="" async defer></script>
+    </body>
+</html>

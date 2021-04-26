@@ -1,0 +1,46 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/user_login_register.css'%}">
+{% endblock %}
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all user_profile related pages  ----------------------->
+	<div class="user-auth-form">
+			<h1 class="text-md-xl text-color-darkblue"> Login </h1>
+			<div class="register-form">
+				<form method="POST" action="{% url 'pages:user:user-login'%}">
+					{% csrf_token %}
+					<div class="input-box" >
+						<label for="{{ form.username.id_for_label }}" class="text-color-darkblue">Username</label>
+						{{ form.username }}
+						<i class="fas fa-user icon-input"></i>
+					</div>
+					
+					<div class="input-box" >
+						<label for="{{ form.password.id_for_label }}" class="text-color-darkblue">Password</label>
+						{{ form.password }}
+						<i class="fas fa-lock icon-input"></i>
+					</div>
+					
+					 <div >
+						    <small class="text-sm text-color-red footer-links">  {{errors }}  </small>
+						    <input class="btn mg-bt-1 " type="submit" name="submit" value="Login">
+						    <small class="text-sm text-color-darkblue ">Don't have an account? <a href="{% url 'pages:user:user-register' %}" class="text-color-red"><strong>Register here<strong></a></small>
+						</div>
+				</form>
+			</div>
+		</div>
+<!------------------ ending of  extending loading banner info for all user_profile related pages  ----------------------->
+{% endblock banner %}
+
+
+{% block content  %}
+<!------------------ extends loading base html  ----------------------->
+
+{% endblock %}
+
+
+

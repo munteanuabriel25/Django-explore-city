@@ -1,0 +1,111 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+{% load sidebar_menu_category %}
+{% load wishlist_action_status %}
+{% load rating_action_status %}
+
+
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/listing.css'%}">
+{% endblock %}
+
+
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all listing pages  ----------------------->
+	<div class="front-msg">
+		<p class="text-xl  ">{{ category }} Listings </p>
+	</div>
+	<form method="GET" class="search-form">
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input type="search" placeholder="What are you looking ">
+		</div>
+		<div class="search-input">
+			<i class="fas fa-map-marker-alt form-icon"></i>
+			<input type="search" placeholder="Search location">
+		</div>
+		<div class="search-input">
+                <i class="fas fa-chevron-down form-icon"></i>
+	            <select name="cars" id="cars">
+		           
+	            </select>
+		</div>
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input class="btn-form" type="submit" value="Search">
+		</div>
+	</form>
+<!------------------ ending of  extending loading banner info for all listing pages  ----------------------->
+{% endblock banner %}
+
+
+
+{% block content  %}
+<!------------------ extends loading base html  ----------------------->
+	<section  class="main-view">
+		<div class="main-view-items">
+			<div class="sidebar-items">
+				{% block sidebar_menu_category %}
+					{% sidebar_menu_category category %}
+				{% endblock sidebar_menu_category %}
+			</div>
+			
+			<div>
+				<div class="listing-items">
+					{% for listing in listings %}
+						<div class="listing-item">
+							<div class="listing-image">
+									<img class="picture-thumb" src="{{ listing.picture.url }}">
+									<div class="over-wraper">
+										<a class="zoom-button" href="https://fontawesome.com/icons/search?style=solid">
+											<i class="fas fa-search overlay-icon round"></i>
+										</a>
+									</div>
+							</div>
+							<div class="listing-category">
+								<img class="icon-thumb" src="{{ listing.category.icon.url }}">
+								<p class="text-sm text-color-grey ">Restaurant</p>
+							</div>
+							<div class="listing-detail">
+								<a href="" class="text-md text-color-darkgrey  mg-bt-1"> {{ listing.name }} </a>
+								<p class="text-sm text-color-grey mg-bt-05"><i class="fas fa-map-marker-alt mg-rt-1 text-color-red"></i> {{ listing.address }}</p>
+								<p class="text-sm text-color-grey mg-bt-05"><i class="fas fa-phone-alt mg-rt-1 text-color-red"></i> {{ listing.phone }}</p>
+								<p class="text-sm text-color-grey mg-bt-05"><i class="fas fa-envelope social-media-icon mg-rt-1 text-color-red "></i> {{ listing.email }}</p>
+							</div>
+							<div class="review-ratings">
+								<div class="wishlist-container">
+									<p class="text-sm text-color-darkgrey"> <strong>{{ listing.rating }} / 5 </strong></p>
+									<p class="text-sm text-color-grey">from 200 users</p>
+								</div>
+								<div class="wishlist-container">
+									{% block rating_action_status %}
+										{% color_rating_stars listing user %}
+									{% endblock  %}
+								</div>
+								<div class="wishlist-container">
+									{% block wishlist_action_status %}
+										{% is_into_wishlist listing user %}
+									{% endblock %}
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div >
+				<div class="paginator mg-tp-3">
+					{% if is_paginated %}
+						{% if listings.has_previous %}
+							<a href="{{ previous_url }}" class="btn"><i class="fas fa-chevron-left"></i></a>
+						{% endif%}
+						<p class="text-sm-bold text-color-darkgrey mg-rt-1 mg-lt-1">{{ listings.number }} of {{ listings.paginator.num_pages }}</p>
+						{% if listings.has_next %}
+							<a href="{{ next_url }}" class="btn"><i class="fas fa-chevron-right"></i></a>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

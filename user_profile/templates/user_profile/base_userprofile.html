@@ -1,0 +1,56 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/user_profile.css'%}">
+{% endblock %}
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all user_profile related pages  ----------------------->
+	<div class="front-msg">
+		<p class="text-xl  "> {{ request.user|title }} Profile Page </p>
+	</div>
+	<form method="GET" class="search-form">
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input type="search" placeholder="What are you looking ">
+		</div>
+		<div class="search-input">
+			<i class="fas fa-map-marker-alt form-icon"></i>
+			<input type="search" placeholder="Search location">
+		</div>
+		<div class="search-input">
+                <i class="fas fa-chevron-down form-icon"></i>
+	            <select name="cars" id="cars">
+		           
+	            </select>
+		</div>
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input class="btn-form" type="submit" value="Search">
+		</div>
+	</form>
+<!------------------ ending of  extending loading banner info for all user_profile related pages  ----------------------->
+{% endblock banner %}
+
+
+{% block content  %}
+<!------------------ extends loading base_blog  html  ----------------------->
+	<section  class="main-view">
+		<div class="main-view-items">
+			
+			{% block left_sidebar %}
+<!--	here should implement a sidebar for blog app			-->
+			{% endblock %}
+			
+			
+			
+			{% block userprofile_content %}
+<!--	here is extended the main info on the blog app			-->
+			{% endblock %}
+			
+		</div>
+	</section>
+<!------------------ ending of extending loading base_blog  html  ----------------------->
+{% endblock content %}

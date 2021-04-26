@@ -1,0 +1,203 @@
+{% extends parent_template|default:'user_profile/base_userprofile.html' %}
+{% load static %}
+{% load left_sidebar_blog %}
+
+
+
+{% block left_sidebar %}
+	{% block left_sidebar_blog %}
+		{% left_sidebar_blog %}
+	{% endblock left_sidebar_blog %}
+{% endblock %}
+
+
+{% block userprofile_content %}
+		<div class="right-side">
+			<div class="user-form">
+				<div class="profile-container mg-bt-1">
+					<div class="flex-row">
+						<p class=" text-color-greydark text-sm-bold">Update account details</p>
+						<button class="small-btn" onclick="showContent1()"><i class="fas fa-chevron-down"></i> </button>
+					</div>
+					<hr class="line mg-tp-05">
+					<form method="post" enctype="multipart/form-data" id="myDIV1"">
+			            {% csrf_token %}
+							<div class="form-items mg-tp-05">
+					            <div class="profile-input">
+						            <label for="{{user_form.username.id_for_label }}" class="text-color-darkgrey text-sm-bold">Username</label>
+									{{ user_form.username }}
+						            <i class="input-icon fas fa-user"></i>
+					            </div>
+					            <div class="profile-input">
+						        	<label for="{{user_form.email.id_for_label }}" class="text-sm-bold text-color-darkgrey">E-mail</label>
+									{{ user_form.email }}
+						            <i class="input-icon fas fa-envelope"></i>
+					            </div>
+					            <div class="profile-input">
+						            <label for="{{profile_form.name.id_for_label }}" class="text-sm-bold text-color-darkgrey">Full name</label>
+									{{ profile_form.name }}
+						            <i class="input-icon fas fa-user"></i>
+					            </div>
+					            <div class="profile-input">
+						            <label for="{{profile_form.picture.id_for_label }}" class="text-sm-bold text-color-darkgrey">Profile picture</label>
+									{{ profile_form.picture }}
+					                <i class="input-icon fas fa-images"></i>
+					            </div>
+					            <div class="profile-input">
+					                <label for="{{profile_form.facebook.id_for_label }}" class="text-sm-bold text-color-darkgrey">Facebook address</label>
+									{{ profile_form.facebook }}
+					                <i class="input-icon fab fa-facebook-square"></i>
+					            </div>
+					            <div class="profile-input">
+					                <label for="{{profile_form.instagram.id_for_label }}" class="text-sm-bold text-color-darkgrey">Instagram address</label>
+									{{ profile_form.instagram }}
+						            <i class="input-icon fab fa-instagram-square"></i>
+					            </div>
+					            <div class="profile-input">
+						            <label for="{{profile_form.blog_url.id_for_label }}" class="text-sm-bold text-color-darkgrey">Personal blog</label>
+									{{ profile_form.blog_url }}
+					                <i class="input-icon fab fa-blogger"></i>
+					            </div>
+								 <div class="profile-input">
+						            <label for="{{profile_form.blog_url.id_for_label }}" class="text-sm-bold text-color-darkgrey">Aboout me</label>
+									{{ profile_form.description }}
+					                <i class="input-icon far fa-file-alt"></i>
+					            </div>
+							</div>
+							<input type="submit" value="Update profile" class="btn">
+					</form>
+				</div>
+				
+				
+				
+				
+				<div class="profile-container mg-bt-1"  >
+					<div class="flex-row">
+						<p class=" text-color-greydark text-sm-bold">Add a new post </p>
+						<button class="small-btn" onclick="showContent()"><i class="fas fa-chevron-down"></i> </button>
+					</div>
+					<hr class="line mg-tp-05">
+					
+					<form method="post" action= "{% url 'pages:user:post-create' user.username %}" enctype="multipart/form-data" id="myDIV" >
+			            {% csrf_token %}
+							<div class="form-items mg-tp-05">
+					            <div class="profile-input">
+						            <label for="{{user_form.username.id_for_label }}" class="text-color-darkgrey text-sm-bold">Post title</label>
+									{{ post_form.title }}
+						            <i class="input-icon far fa-file-alt"></i>
+					            </div>
+					            
+					            <div class="profile-input">
+						            <label for="{{profile_form.picture.id_for_label }}" class="text-sm-bold text-color-darkgrey">Post picture</label>
+									{{ post_form.picture }}
+					                <i class="input-icon fas fa-images"></i>
+					            </div>
+					          
+								 <div class="profile-input">
+						            <label for="{{profile_form.blog_url.id_for_label }}" class="text-sm-bold text-color-darkgrey">Select tags</label>
+									{{ post_form.tags }}
+					                <i class="input-icon fas fa-tags"></i>
+					            </div>
+								
+								 <div class="profile-input">
+						        	<label for="{{user_form.email.id_for_label }}" class="text-sm-bold text-color-darkgrey">Post content</label>
+									{{ post_form.content }}
+						            <i class="input-icon far fa-file-alt"></i>
+					            </div>
+							</div>
+							<input type="submit" value="Save Post" class="btn">
+					</form>
+				</div>
+				
+				<div class="profile-container"  >
+					<div class="flex-row">
+						<p class=" text-color-greydark text-sm-bold">Your Blog Posts </p>
+						<button class="small-btn" onclick="showContent()"><i class="fas fa-chevron-down"></i> </button>
+					</div>
+					<hr class="line mg-tp-05">
+					<table class="profile-table mg-tp-05">
+						<thead>
+ 							<tr>
+							    <th width="5%" ><p class=" text-color-greydark text-sm-bold">No</p></th>
+							    <th width="45%" ><p class=" text-color-greydark text-sm-bold">Title</p></th>
+							    <th width="20%"><p class=" text-color-greydark text-sm-bold">Date Posted</p></th>
+							    <th width="10%"><p class=" text-color-greydark text-sm-bold">Likes</p></th>
+							    <th width="10%"><p class=" text-color-greydark text-sm-bold">Actions</p></th>
+						    </tr>
+							
+						</thead>
+						<tbody >
+							{% for post in user.post_user.all %}
+								<tr>
+									<td width="" ><p class="text-color-greydark text-sm-bold">{{ forloop.counter}}</p></td>
+								    <td width="" ><p class=" text-color-greydark text-sm-bold">{{ post.title }}</p></td>
+								    <td width=""><p class=" text-color-greydark text-sm-bold">{{ post.pub_date|date:'d F Y - h:i A'}}</p></td>
+								    <td width=""><p class=" text-color-greydark text-sm-bold">{{ post.number_likes }}</p></td>
+								    <td width="" >
+										    <form class="this "  method="GET" action="{{ post.get_action_url }}">
+									        <input type="hidden">
+									        <button class="btn-small" type="submit"  name="action" value="delete"><i class="fas fa-trash"></i></button>
+									        <button class="btn-small" type="submit"  name="action" value="edit"><i class="fas fa-edit"></i></button>
+								            </form>
+										    
+									
+									    
+								    </td>
+								</tr>
+							{% endfor %}
+							
+						
+						</tbody>
+					</table>
+					
+				</div>
+				
+			</div>
+			
+			
+			
+			
+			
+			
+			<div class="user-account-info">
+				<div class="author-profile-container">
+					<img class="" src="{{ user.userprofile.picture.url }}">
+					<p class="mg-tp-05 text-color-greydark text-sm-bold"> Author account details: </p>
+					<hr class="line mg-tp-05">
+					
+					<p class="text-color-darkblue text-sm mg-tp-05"><i class="fas fa-user-tie icon-block"></i>Username: Gabriel </p>
+					<p class="text-color-darkblue text-sm mg-tp-05"><i class="fas fa-clock icon-block"></i>Date joined: 23/02/2011</p>
+					<p class="text-color-darkblue text-sm mg-tp-05"><i class="fas fa-key icon-block"></i>Permision: </p>
+					<p class="text-color-darkblue text-sm mg-tp-05 "><i class="fas fa-wallet icon-block"></i>Payed account: </p>
+					<p class="text-color-darkblue text-sm mg-tp-05 "><i class="fas fa-calendar-day icon-block"></i>Until: </p>
+					
+					
+			    </div>
+			</div>
+			
+			
+		</div>
+		
+		<script>
+			function showContent(){
+			var x = document.getElementById("myDIV");
+				if (x.style.display =="none"){
+					
+					x.style.display="initial";
+				}else{
+					x.style.display="none";
+				}
+			}
+			
+			function showContent1(){
+			var x = document.getElementById("myDIV1");
+				if (x.style.display =="none"){
+					
+					x.style.display="initial";
+				}else{
+					x.style.display="none";
+				}
+			}
+		</script>
+
+{% endblock %}

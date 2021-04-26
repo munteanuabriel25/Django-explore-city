@@ -1,0 +1,52 @@
+{% extends parent_template|default:'blog/base_blog.html' %}
+{% load left_sidebar_blog %}
+{% load static %}
+
+
+
+{% block left_sidebar %}
+<!--	here should implement a sidebar for blog app			-->
+		{% block left_sidebar_blog %}
+					{% left_sidebar_blog %}
+		{% endblock left_sidebar_blog %}
+
+<!--	here should implement a sidebar for blog app			-->
+{% endblock %}
+
+
+<div class="">
+<!------------------ extends loading base html  ----------------------->
+{% block blog_content %}
+<div class="listing-items">
+	{% for post in posts %}
+		<div class="listing-item">
+			<div class="top-part">
+				<img src="{{ post.picture.url }}">
+				<div class="author-container">
+					<div class="author-detail">
+						<img  class="image-round" src="{{ post.user.userprofile.picture.url  }}">
+						<p class="text-sm-bold text-color-greydark mg-lt-1"> {{ post.user.userprofile.username }} </p>
+						<a href=""><i class="far fa-heart text-color-red mg-lt-1"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="bottom-part">
+				<div class="post-detail flex-row align-center">
+					<p class="text-sm text-color-grey mg-rt-05">{{ post.pub_date|date:"j M Y"}}</p>
+					<p class="text-sm text-color-grey mg-rt-1 ">{{ post.pub_date|date:"g:i A"}}</p>
+					<p class="text-sm text-color-red mg-rt-05 mg-lt-1"> <i class="fas fa-comment-alt"></i> {{ post.number_comments }}</p>
+					<p class="text-sm text-color-red "><i class="fas fa-thumbs-up"></i> {{ post.number_likes }} </p>
+				</div>
+				<a href="{{ post.get_absolute_url }}" class="mg-tp-2 text-md text-color-greydark"> {{ post.title }} </a>
+				<p class="mg-tp-05 text-sm text-color-grey spaced-lines"> {{ post.content|truncatewords:26 }}</p>
+				<a href="{{ post.get_absolute_url }}" class="margin-edge text-color-white">read more <i class="fas fa-angle-double-right"></i></a>
+			</div>
+		</div>
+	{% endfor %}
+	
+	<div class="paginator mg-tp-3">
+<!--	    insert here paginator later       -->
+	</div>
+</div>
+{% endblock %}
+</div>

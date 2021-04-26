@@ -1,0 +1,64 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/home.css'%}">
+{% endblock %}
+
+
+
+
+{% block banner %}
+	<div class="front-msg">
+		<p class="text-xxl ">Let's Explore Your</p>
+		<p class="text-xxl ">Awesome City</p>
+		<p class="text-md ">Find great places to stay, eat, shop, or visit from local experts.</p>
+	</div>
+	<form method="GET" class="search-form">
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input type="search" placeholder="What are you looking ">
+		</div>
+		<div class="search-input">
+			<i class="fas fa-map-marker-alt form-icon"></i>
+			<input type="search" placeholder="Search location">
+		</div>
+		<div class="search-input">
+                <i class="fas fa-chevron-down form-icon"></i>
+	            <select name="cars" id="cars">
+		           
+	            </select>
+		</div>
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input class="btn-form" type="submit" value="Search">
+		</div>
+	</form>
+ 
+	<div class="register-msg">
+		<p class="text-md " >Register an acount today and start listing your business !</p>
+	</div>
+{% endblock banner %}
+
+
+{% block content  %}
+	    <!------------------ extends loading main page listing cards ----------------------->
+		<section  class="main-index">
+            <div class="listing-cards">
+	            {% for category in categories %}
+	            <div class="listing-item">
+                    <a href='{{ category.get_absolute_url }}' class="listing-href">
+                        <div class="listing-info">
+                            <img src="{{ category.icon.url }}">
+                            <p class="listing-name">{{ category.name }}</p>
+                            <div>
+                                <p class="listing-count">{{ category.listing_categ.count }}</p>
+                                <p class="listing-listing">Listings</p>
+                            </div>
+                        </div>
+                        
+                    </a>
+                </div>
+	            {% endfor %}
+            </div>
+        </section>
+{% endblock %}

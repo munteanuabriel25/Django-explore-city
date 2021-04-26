@@ -1,0 +1,343 @@
+
+
+/* -------------- banner image resizing ---------------  */
+
+.header-index{
+    width: 100%;
+    height: 50vh;
+    background: url("../images/back_main1.jpg" )no-repeat center center/cover;
+
+}
+
+.front-msg {
+    display: flex;
+    flex-direction:column;
+    margin-top:8rem;
+    align-items: center;
+    color:white;
+}
+
+.register-msg{
+    color: white;
+    margin: 5rem auto;
+    text-align: center;
+
+}
+
+/* -------------- actual page items settings ---------------  */
+
+
+
+
+.main-view {
+    background-color: #f0f4f7;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    
+}
+
+.main-view-items {
+ 
+    width: 90%;
+    margin: auto auto;
+    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: 300px auto;
+    grid-gap:1rem
+
+}
+
+/* --------- end  actual page items settings ---------------  */
+
+
+
+
+
+
+/* ------------------- left sidebar -------------- */
+.sidebar-blog {
+    background-color: #f0f4f7;
+}
+
+
+.sidebar-blog-container {
+    width: 90%;
+    padding: 1rem 1rem;
+    background:  #ffffff;
+    
+
+}
+
+.sidebar-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid black;
+
+}
+
+.info-container {
+    margin-top: 1rem;
+    width: 100%;
+    height: 140px;
+    position:relative;
+
+}
+
+.info-container img {
+    display: block;
+    width: 100%;
+    max-height: 100%;
+
+}
+
+.icon {
+    background-color:rgb(233, 7, 7);
+    padding: 0.4rem ;
+    position:absolute;
+    top:0%;
+    left:0%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color:white;
+}
+.author{
+    background-color : rgba(255, 255, 255, 0.8);
+    padding: 0.4rem ;
+    position:absolute;
+    bottom:10%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--darkblue);
+}
+
+
+
+
+
+.info-container-authors{
+    margin-top: 1rem;
+    width: 100%;
+    height: 60px;
+    background-color: rgb(235, 235, 235);
+    display: flex;
+    align-items: center;
+    padding:0rem 1rem;
+}
+
+.info-container-authors img{
+    display: block;
+    width: 25%;
+    height: 80%;
+    max-height: 100%;
+    object-fit:cover;
+    clip-path: circle();
+   
+}
+
+.icon-author {
+    display: block;
+    background-color:rgb(233, 7, 7);
+    padding: 0.4rem ;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color:white;
+
+}
+
+
+
+.newsletter {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem 0.5rem;
+    outline: none;
+    border: 1px solid var(--darkgrey);
+    font-family: "Roboto", sans-serif;
+	letter-spacing: 1px;
+	font-weight: 400;
+	font-size: 13px;
+    background-color: rgb(235, 235, 235);
+
+}
+
+
+/* ----------------end left sidebar -------------- */
+
+
+/* -------------- right info container ----------- */
+
+.right-side {
+    display: grid;
+    grid-template-columns: auto 300px;
+    grid-gap:1rem
+
+}
+.user-form {
+   
+    background-color: #f0f4f7;
+    width: 100%;
+}
+
+.user-account-info {
+    background-color: #f0f4f7;
+    height: 100px;
+    width: 100%;
+}
+
+
+
+
+/* ------------end right info container ---------- */
+
+
+
+/* ------- right side user info  ------- */
+
+.author-view {
+    background-color: #f0f4f7;
+}
+
+.author-profile-container {
+    width: 90%;
+    padding: 1rem;
+    background-color: rgb(255, 255, 255);
+    margin: 0px auto;
+    box-shadow: 8px 8px 10px 0px rgba(0, 0, 0, 0.11);
+
+    border: 1px solid rgba(0, 0, 0, 0.144)
+    
+}
+.author-profile-container img{
+    width: 90px;
+    clip-path: circle();
+    margin:0px auto;
+    display: block;
+    object-fit: cover
+}
+
+.line {
+    width: 50%;
+}
+
+.icon-block {
+    display: inline-block;
+    padding: 6px;
+    min-width: 25px;
+    background-color: rgb(233, 7, 7);
+    color:whitesmoke;
+    margin-right: 1rem;
+    border-radius: 30%;
+}
+
+
+/* -----end right side user info ------ */
+
+
+
+
+
+/* ----    user profile update form  -------- */
+
+
+
+.profile-container{
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+form{
+    width: 96%;
+    margin:0px auto;
+    margin-top: 1rem;
+
+}
+
+.form-items {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-column-gap:1rem;
+}
+
+form .profile-input{
+    width: 100%;
+    position: relative;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+form .profile-input .input-icon {
+    position: absolute;
+    left: 10px;
+    top:27px;
+    color: rgb(87, 81, 81);
+  
+}
+
+
+form .profile-input .input-prof {
+    width: 100%;
+	outline: none;
+	border: 1px solid rgba(58, 58, 58, 0.178);
+	background: transparent;
+	padding: 8px 10px;
+	padding-left: 40px;
+	color: var(--darkblue);
+	box-shadow: inset 0px 0px 25px rgba(36, 36, 36, 0.151);
+	font-family: "Roboto", sans-serif;
+	letter-spacing: 1px;
+	font-weight: 400;
+	font-size: 13px;
+    resize: none;
+}
+
+form .profile-input input ::placeholder{
+    color: var(--darkblue);
+}
+
+
+.profile-table{ 
+    width: 100%;
+    background-image: radial-gradient( circle 343px at 46.3% 47.5%,  rgba(242,242,242,1) 0%, rgba(241,241,241,1) 72.9% );
+    border-radius: 6px;    
+    box-shadow: 8px 8px 10px 0px rgba(0, 0, 0, 0.11);
+    border-collapse:collapse;
+
+
+}
+
+th {
+    /* background-color:var(--darkblue); */
+    padding: 0.5rem 0rem;
+    text-align: center;
+    color:var(--darkblue);
+}
+
+
+
+td {
+    padding: 0.3rem 0rem;
+    text-align: center;
+
+}
+
+
+
+table tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.123);
+}
+
+.this {
+    display: inline;
+}
+
+/* ----end user profile update form  -------- */
+
+
+

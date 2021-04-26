@@ -1,0 +1,27 @@
+
+	{% if 'yes' in rated %}
+		<form method="post" action="{% url 'pages:listing:rating-action' listing.id %}">
+			{% csrf_token %}
+				{% for item in star_list %}
+					{% if item.fill == 0 %}
+						<button class="star" type="submit" name="stars" value="{{item.value}}">  <i class="fas fa-star"></i> </button>
+					{% else %}
+						<button class="star text-color-yellow" type="submit" name="stars" value="{{item.value}}">  <i class="fas fa-star"></i> </button>
+					{% endif %}
+				{% endfor %}
+		</form>
+		<p class="text-sm text-color-grey">change rating </p>
+		
+	{% else %}
+		<form method="post" action="{% url 'pages:listing:rating-action' listing.id %}">
+			{% csrf_token %}
+				<button class="star" type="submit" name="stars" value="1">  <i class="fas fa-star"></i> </button>
+				<button class="star" type="submit" name="stars" value="2">  <i class="fas fa-star"></i> </button>
+				<button class="star" type="submit" name="stars" value="3">  <i class="fas fa-star"></i> </button>
+				<button class="star" type="submit" name="stars" value="4">  <i class="fas fa-star"></i> </button>
+				<button class="star" type="submit" name="stars" value="5">  <i class="fas fa-star"></i> </button>
+	
+		</form>
+		<p class="text-sm text-color-grey">give a rating </p>
+	{% endif %}
+

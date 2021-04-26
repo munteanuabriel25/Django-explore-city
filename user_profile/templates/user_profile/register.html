@@ -1,0 +1,55 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/user_login_register.css'%}">
+{% endblock %}
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all user_profile related pages  ----------------------->
+	<div class="user-auth-form">
+			<h1 class="text-md-xl text-color-darkblue"> Register today </h1>
+			<div class="register-form">
+				<form method="POST">
+					{% csrf_token %}
+					<div class="input-box" >
+						<label for="{{ form.username.id_for_label }}" class="text-color-darkblue">Username</label>
+						{{ form.username }}
+						<i class="fas fa-user icon-input"></i>
+					</div>
+					<div class="input-box" >
+						<label for="{{ form.email.id_for_label }}" class="text-color-darkblue">E-mail</label>
+						{{ form.email }}
+						<i class="fas fa-user icon-input"></i>
+					</div>
+					
+					<div class="input-box" >
+						<label for="{{ form.password1.id_for_label }}" class="text-color-darkblue">Password</label>
+						{{ form.password1 }}
+						<i class="fas fa-lock icon-input"></i>
+					</div>
+					<div class="input-box" >
+						<label for="{{ form.password2.id_for_label }}" class="text-color-darkblue">Password</label>
+						{{ form.password2 }}
+						<i class="fas fa-lock icon-input"></i>
+					</div>
+					 <div >
+						    <small class="text-sm text-color-red footer-links">  {{form.username.errors }}  </small>
+						    <input class="btn mg-bt-1 " type="submit" name="submit" value="Register">
+						    <small class="text-sm text-color-darkblue ">Allready have an account? <a href="{% url 'pages:user:user-login' %}" class="text-color-red"><strong>Login here<strong></a></small>
+						</div>
+				</form>
+			</div>
+		</div>
+<!------------------ ending of  extending loading banner info for all user_profile related pages  ----------------------->
+{% endblock banner %}
+
+
+{% block content  %}
+<!------------------ extends loading base html  ----------------------->
+
+{% endblock %}
+
+
+

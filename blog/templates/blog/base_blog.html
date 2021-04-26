@@ -1,0 +1,59 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/blog.css'%}">
+<!--	  <link rel="stylesheet" href="{% static 'css/user_profile.css'%}">-->
+{% endblock %}
+
+
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all listing pages  ----------------------->
+	<div class="front-msg">
+		<p class="text-xl  "> Blog Posts </p>
+	</div>
+	<form method="GET" action="{% url 'pages:blog:home-view' %}" class="search-form">
+		
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input type="search" name="title" placeholder="Post Title">
+		</div>
+		<div class="search-input">
+			<i class="fas fa-tags form-icon"></i></i>
+			<input type="search" name="tag" placeholder="Tags ">
+		</div>
+		<div class="search-input">
+			<i class="far fa-user form-icon"></i>
+			<input type="search" name="author" placeholder="Auhor name ">
+		</div>
+		<div class="search-input">
+			<i class="fas fa-search form-icon"></i>
+			<input class="btn-form" type="submit"  name="search" value="search">
+		</div>
+	</form>
+<!------------------ ending of  extending loading banner info for all listing pages  ----------------------->
+{% endblock banner %}
+
+
+
+{% block content  %}
+<!------------------ extends loading base_blog  html  ----------------------->
+	<section  class="main-view">
+		<div class="main-view-items">
+			
+			{% block left_sidebar %}
+<!--	here should implement a sidebar for blog app			-->
+			{% endblock %}
+			
+			
+			
+			{% block blog_content %}
+<!--	here is extended the main info on the blog app			-->
+			{% endblock %}
+			
+		</div>
+	</section>
+<!------------------ ending of extending loading base_blog  html  ----------------------->
+{% endblock content %}

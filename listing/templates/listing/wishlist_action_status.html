@@ -1,0 +1,25 @@
+
+{% if answer %}
+	{% if 'yes' in answer %}
+		<div class="wishlist-container">
+			<form method="post" action="{% url 'pages:listing:wishlist-action' listing.id %}">
+				{% csrf_token %}
+				<button type="submit" class="listing-like" value="Add to wishlist"><i class="far fa-star"></i>
+				</button>
+			</form>
+			<p class="text-sm text-color-grey">remove wish</p>
+			
+		</div>
+	{% else %}
+		<div class="wishlist-container">
+			
+			<form method="post" action="{% url 'pages:listing:wishlist-action' listing.id %}">
+				{% csrf_token %}
+				<button type="submit" class="listing-like" value="Add to wishlist"><i class="far fa-star"></i>
+				</button>
+			</form>
+			<p class="text-sm text-color-grey">add wish</p>
+			
+		</div>
+	{% endif%}
+{% endif %}

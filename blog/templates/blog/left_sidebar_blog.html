@@ -1,0 +1,60 @@
+
+
+
+
+	<div class="sidebar-blog">
+		<div class="sidebar-blog-container mg-bt-1">
+			<p class="sidebar-title">LATEST POSTS</p>
+			{% for post in latest_posts %}
+				<div class="info-container">
+					<img src="{{ post.picture.url }}">
+					<p class="icon">{{ forloop.counter }} </p>
+					<a href="{{ post.get_absolute_url }}" class="author">{{post.title|truncatewords:10}}<i class="fas fa-angle-double-right text-color-red mg-lt-05"></i> </a>
+				</div>
+				<div class="flex-row align-center mg-tp-05 ">
+					<p class="text-ss text-color-grey mg-rt-05">by </p>
+					<p class="text-ss text-color-red mg-rt-05"> {{post.user.userprofile.username }} </p>
+					<p class="text-ss text-color-grey">{{ post.pub_date|date:'d F Y'}} </p>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="sidebar-blog-container mg-bt-1">
+			<p class="sidebar-title">TOP STORY TELLERS</p>
+			{% for user in top_storytellers %}
+			<div class="info-container-authors">
+				<p class="icon-author mg-rt-05">{{ forloop.counter }} </p>
+				<img src="{{ user.userprofile.picture.url }}">
+				<div class="flex-column  mg-lt-1 ">
+					<p class="text-sm text-color-greydark mg-rt-05">{{ user.userprofile.username}} </p>
+					<p class="text-ss text-color-greydark">with {{ user.post_user.count }} posts </p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		
+		<div class="sidebar-blog-container mg-bt-1">
+			<p class="sidebar-title mg-bt-1">TAGS</p>
+			<div class="tags-container">
+				{% for tag in tags %}
+				<a href="?tag={{tag.name }}" class="btn-small mg-bt-05">{{ tag.name|lower }}</a>
+				{% endfor %}
+			</div>
+			
+			
+			
+		</div>
+	
+
+		<div class="sidebar-blog-container mg-bt-1">
+			<p class="sidebar-title mg-bt-1">STAY UPDATED</p>
+			<form>
+				<div class="newsletter-input-container ">
+					<input class="newsletter" type="email" placeholder="enter your email address">
+				</div>
+				<input class="btn-small mg-tp-05" type="submit" value="SUBMIT">
+			</form>
+		</div>
+	
+
+	</div>

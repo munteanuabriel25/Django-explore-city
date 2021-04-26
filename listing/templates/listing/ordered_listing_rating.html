@@ -1,0 +1,18 @@
+<div class="profile-container mg-bt-1">
+	<p class="profile-title text-color-white "> <i class="fas fa-chart-line mg-rt-1 text-color-white"></i>{{ name }}</p>
+		{% for listing in top_rated %}
+			<div class="flex-row align-center mg-tp-05 mg-lt-1">
+				<div class="icon-block-number ">
+					<p class="text-color-darkblue text-sm">{{ forloop.counter }}</p>
+				</div>
+				<div class="mg-lt-1" >
+					<p class="text-color-darkgrey text-ms">
+						{{listing.name }}
+					</p>
+					<p class="text-color-darkgrey text-sm">
+						{{listing.rating }} rating
+					</p>
+				</div>
+			</div>
+	{% endfor %}
+</div>

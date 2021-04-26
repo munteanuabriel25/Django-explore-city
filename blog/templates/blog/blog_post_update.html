@@ -1,0 +1,96 @@
+{% extends parent_template|default:'blog/base_blog.html' %}
+{% load left_sidebar_blog %}
+{% load static %}
+
+
+{% block left_sidebar %}
+<!--	here should implement a sidebar for blog app			-->
+		{% block left_sidebar_blog %}
+					{% left_sidebar_blog %}
+		{% endblock left_sidebar_blog %}
+
+<!--	here should implement a sidebar for blog app			-->
+{% endblock %}
+
+
+{% block blog_content %}
+<!------------------ extends loading base_blog html  ----------------------->
+<div class="right-side">
+	<div class="post-view">
+		
+		
+		<div class="profile-container mg-bt-1"  >
+					<div class="flex-row">
+						<p class=" text-color-greydark text-sm-bold">Update post </p>
+					</div>
+					<hr class="line mg-tp-05">
+					
+					<form class="form" method="post" enctype="multipart/form-data" >
+			            {% csrf_token %}
+							<div class="form-items mg-tp-05">
+					            <div class="profile-input">
+						            <label for="{{user_form.username.id_for_label }}" class="text-color-darkgrey text-sm-bold">Post title</label>
+									{{ post_update_form.title }}
+						            <i class="input-icon far fa-file-alt"></i>
+					            </div>
+					            
+					            <div class="profile-input">
+						            <label for="{{profile_form.picture.id_for_label }}" class="text-sm-bold text-color-darkgrey">Post picture</label>
+									{{ post_update_form.picture }}
+					                <i class="input-icon fas fa-images"></i>
+					            </div>
+					          
+								 <div class="profile-input">
+						            <label for="{{profile_form.blog_url.id_for_label }}" class="text-sm-bold text-color-darkgrey">Select tags</label>
+									{{ post_update_form.tags }}
+					                <i class="input-icon fas fa-tags"></i>
+					            </div>
+								
+								 <div class="profile-input">
+						        	<label for="{{user_form.email.id_for_label }}" class="text-sm-bold text-color-darkgrey">Post content</label>
+									{{ post_update_form.content }}
+						            <i class="input-icon far fa-file-alt"></i>
+					            </div>
+							</div>
+							{% if action == "edit" %}
+								<input type="submit" name="action" value="Update Post" class="btn">
+							{% else %}
+								<p class="mg-tp-05 mg-bt-1 text-color-greydark text-sm-bold" ><i class="fas fa-exclamation-circle text-color-red"></i> Are you sure that you want to delete this post ? <p>
+								<input type="submit" name="action" value="Delete Post" class="btn">
+							{% endif %}
+					</form>
+		</div>
+
+	</div>
+	
+	
+	
+	
+	<div class="author-view">
+		<div class="author-profile-container">
+			<img class="" src="{{ post.user.userprofile.picture.url }}">
+			<p class="mg-tp-2 text-color-greydark text-sm-bold"> Author description: </p>
+			<p class="mg-tp-05 text-color-greydark text-sm spaced-lines-12"> {{ post.user.userprofile.description }} </p>
+			<p class="mg-tp-2 text-color-greydark text-sm-bold"> Featured posts</p>
+			<hr class="line mg-tp-05">
+			{% if post.get_related != 'None' %}
+				{% for post in post.get_related %}
+				<a href="{{ post.get_absolute_url }}" class="mg-tp-05 text-color-greydark text-sm"><i class="fas fa-chevron-right  mg-rt-05"></i> {{ post.title }}</a>
+				{% endfor %}
+			{% else %}
+				<a href="" class="mg-tp-05 text-color-greydark text-sm"><i class="fas fa-chevron-right  mg-rt-05"></i> No related posts to show</a>
+			{% endif %}
+
+			<hr class="line mg-tp-05">
+			<div class="flex-row mg-tp-05">
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-twitter "></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark mg-rt-05"><i class="fab fa-youtube "></i></a>
+                    <a href="#" class="social-media-links text-sm-bold text-color-greydark"><i class="fab fa-instagram "></i></a>
+			 </div>
+		</div>
+	</div>
+	
+</div>
+<!------------------ ending  loading base_blog html  ----------------------->
+{% endblock %}

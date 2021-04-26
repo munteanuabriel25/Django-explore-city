@@ -1,0 +1,32 @@
+{% if categories %}
+	{% for category in categories %}
+		{% if category == active_category %}
+		
+			<div class="sidebar-item sidebar-item-active">
+				<a href="{{ category.get_absolute_url }}" class="listing-href">
+					<img src="{{ category.icon.url }}">
+					<div>
+						<p class="text-ms text-color-darkgrey "><strong>{{ category.name }}</strong></p>
+						<p class="listing-count">{{ category.no_listings }}</p>
+						<p class="listing-listing">Listings</p>
+					</div>
+					<div class="mg-lt-1">
+						<i class="fas fa-chevron-right text-color-red"></i>
+					</div>
+				</a>
+			</div>
+		{% else %}
+			<div class="sidebar-item">
+				<a href="{{ category.get_absolute_url }}" class="listing-href">
+					<img src="{{ category.icon.url }}">
+					<div>
+						<p class="text-ms text-color-darkgrey"><strong>{{ category.name }}</strong></p>
+						<p class="listing-count">{{ category.no_listings}}</p>
+						<p class="listing-listing">Listings</p>
+					</div>
+				</a>
+			</div>
+		{% endif %}
+	{% endfor %}
+
+{% endif %}
