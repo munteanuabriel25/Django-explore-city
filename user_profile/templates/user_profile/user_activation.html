@@ -1,0 +1,26 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/user_login_register.css'%}">
+{% endblock %}
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all user_profile related pages  ----------------------->
+	<div class="user-auth-form">
+		<h1 class="text-md-xl text-color-darkblue"> User created </h1>
+			<p class="text-ms text-color-darkblue">An email was send to your email address.</p>
+			<p class="text-ms text-color-darkblue">Please click on the link provided.</p>
+	</div>
+<!------------------ ending of  extending loading banner info for all user_profile related pages  ----------------------->
+{% endblock banner %}
+
+
+{% block content  %}
+<!------------------ extends loading base html  ----------------------->
+
+{% endblock %}
+
+
+

@@ -1,0 +1,30 @@
+{% extends parent_template|default:'base.html' %}
+{% load static %}
+
+{% block page_css_load %}
+	  <link rel="stylesheet" href="{% static 'css/user_login_register.css'%}">
+{% endblock %}
+
+
+{% block banner %}
+<!------------------ start extending loading banner info for all user_profile related pages  ----------------------->
+	<div class="user-auth-form">
+		{% if status %}
+			<h1 class="text-md-xl text-color-darkblue"> Activation done </h1>
+			<small class="text-sm text-color-darkblue ">Go to login page <a href="{% url 'pages:user:user-login' %}" class="text-color-red"><strong>Login here<strong></a></small>
+		{% else %}
+			<h1 class="text-md-xl text-color-darkblue"> Bad link </h1>
+			<small class="text-sm text-color-darkblue ">Do you want to resend a new link ? <a href="{% url 'pages:user:user-login' %}" class="text-color-red"><strong>Resend now<strong></a></small>
+		{% endif %}
+	</div>
+<!------------------ ending of  extending loading banner info for all user_profile related pages  ----------------------->
+{% endblock banner %}
+
+
+{% block content  %}
+<!------------------ extends loading base html  ----------------------->
+
+{% endblock %}
+
+
+
