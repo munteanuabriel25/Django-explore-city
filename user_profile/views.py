@@ -3,8 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.views import View
-
-
+from .utils import EmailHandlerMixin
+from django.utils.encoding import  force_text
+from django.utils.http import  urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator as tk_generator
 from .forms import UserUpdateForm, UserProfileUpdateForm, UserLoginForm,UserRegisterForm
 import blog
 
@@ -82,22 +84,47 @@ def user_logout_view(request):
     return HttpResponseRedirect(reverse('pages:home-view'))
 
 
-def user_register_view(request):
-    if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+
+
+class UserRegisterView(EmailHandlerMixin,View):
+    template_name = 'user_profile/register.html'
+    form_class=UserRegisterForm
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
-            form.save()
-            # messages.success(request, 'Your profile was created, log in now.')
-            return HttpResponseRedirect(reverse("pages:home-view"))
+            user = form.save(commit=False)
+            user.is_active= False
+            user.save()
+            
+            self.send_activation_email(request,user)
+            return render(request,'user_profile/user_activation.html', {})
         else:
             return render(request, 'user_profile/register.html', {"form": form})
     
-    else:
-        form = UserRegisterForm()
+    def get(self,request):
+        return render(request, self.template_name, {"form": self.form_class()})
+
+
+def activate_account(request, uidb64, token):
+    if request.method=='GET':
+        status = False
+        try :
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError,ValueError,OverflowError, User.DoesNotExist):
+            user=None
+            
+        if user is not None and tk_generator.check_token(user,token):
+            user.is_active= True
+            user.save()
+            status=True
+            
+        return render(request,'user_profile/user_activation.html', {'status': status})
+       
+
     
-    return render(request, 'user_profile/register.html', {"form": form})
 
-
-
-        
+def test(request):
     
+    return render(request,'user_profile/check_user_activation.html', {'status': False})
