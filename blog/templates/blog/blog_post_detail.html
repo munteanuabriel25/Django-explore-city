@@ -1,6 +1,6 @@
 {% extends parent_template|default:'blog/base_blog.html' %}
 {% load left_sidebar_blog %}
-{% load review_post_blog %}
+
 {% load static %}
 
 
@@ -44,17 +44,16 @@
 			<div class="post-detail">
 				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-comment-alt text-color-red"></i>  {{ post.number_comments }} comments </p>
 				<p  class="text-sm post-thumbnails text-color-greydark"><i class="far fa-clock text-color-red"></i> {{ post.last_updated|date:'d F Y - h:i A'}}  </p>
-				<p class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-thumbs-up text-color-red"></i> {{ post.number_likes }} likes  </p>
+				<p class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-thumbs-up text-color-red"></i> <span id="like-count"> {{ post.number_likes }}</span>  </p>
 				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-tags text-color-red"></i> {{ post.tags.all.count }} tags  </p>
 				<div class="flex-row">
 						{% for tag in post.tags.all %}
 						<a href="" class="small-btn">{{ tag.name }}</a>
 						{% endfor %}
 				</div>
-				{% block review_post_blog %}
-					{% check_status post user %}
-				{% endblock review_post_blog %}
+				<button class="btn-small"  id='like-button' value="{{ post.id }}">LIKE</button>
 				
+
 			</div>
 		</div>
 		{% if update_comment_form %}
@@ -182,6 +181,51 @@
 			 </div>
 		</div>
 	</div>
+	<script>
+		$(document).on('click', '#like-button', function (e) {
+		e.preventDefault();
+		$.ajax({
+		type: 'POST',
+		url: '{% url "pages:blog:post_review" %}',
+		data: {
+			postid: $('#like-button').val(),
+			csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			action: 'post',
+			type : 'like',
+		},
+		success: function (json) {
+			document.getElementById("like-count").innerHTML = json['like_count'],
+			document.getElementById("like-button").innerHTML = json['status']
+		},
+		error: function (xhr, errmsg, err) {
+
+		}
+		});
+	})
+	
+	$(document).on('click', '#wish-button', function (e) {
+		e.preventDefault();
+		$.ajax({
+		type: 'POST',
+		url: '{% url "pages:blog:post_review" %}',
+		data: {
+			postid: $('#like-button').val(),
+			csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			action: 'post',
+			type : 'like',
+		},
+		success: function (json) {
+			document.getElementById("like-count").innerHTML = json['like_count'],
+			document.getElementById("like-button").innerHTML = json['status']
+		},
+		error: function (xhr, errmsg, err) {
+
+		}
+		});
+	})
+	</script>
+	
+	
 	
 </div>
 <!------------------ ending  loading base_blog html  ----------------------->
