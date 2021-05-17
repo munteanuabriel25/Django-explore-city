@@ -332,6 +332,12 @@
 
 }
 
+.action-post{
+    margin-right: 10px;
+    margin-left: 30%;    
+}
+
+
 .post-thumbnails {
     display:block;
     padding: 0.3rem 0.5rem;

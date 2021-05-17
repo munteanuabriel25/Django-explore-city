@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api.apps.ApiConfig',
+    'rest_framework.authtoken',
     
 ]
 
@@ -149,3 +150,8 @@ DEFAULT_FROM_EMAIL = 'hitadvertisingagency@gmail.com'
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}

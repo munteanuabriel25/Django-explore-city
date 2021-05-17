@@ -48,10 +48,13 @@
 				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-tags text-color-red"></i> {{ post.tags.all.count }} tags  </p>
 				<div class="flex-row">
 						{% for tag in post.tags.all %}
-						<a href="" class="small-btn">{{ tag.name }}</a>
+						<a href="" class="btn-small mg-lt-05">{{ tag.name }}</a>
 						{% endfor %}
 				</div>
-				<button class="btn-small"  id='like-button' value="{{ post.id }}">LIKE</button>
+				<div class="action-post">
+					<button class="btn-small mg-lt-05"  id='like-button' value="{{ post.id }}">LIKE</button>
+					<button class="btn-small mg-lt-05"  id='wish-button' value="{{ post.id }}">READ LATER</button>
+				</div>
 				
 
 			</div>
@@ -80,9 +83,9 @@
 			</div>
 		{% endif %}
 		
-		
-		{% for comment in post.get_comments %}
-			<div class="comment">
+		<div class="comment-wraper">
+		{% for comment in comments %}
+			<div class="comment" id="{{comment.id}}">
 				<div class="comment-container">
 					<div class="author-info">
 						<img class="auth-picture" src="{{ comment.user.userprofile.picture.url }}">
@@ -104,23 +107,19 @@
 				<div class="comment-actions">
 					{% if user.is_authenticated %}
 						{% if comment.user == request.user %}
-							<form method="POST" action="{{ comment.action_url }}">
-								{% csrf_token %}
-								<input type="hidden" name="perform" value="delete">
-								<button  type="submit"   class="small-btn"><i class="fas fa-trash"></i> </button>
-							</form>
-							<a href="{{ comment.action_url }}" name="perform" class="small-btn"> <i class="far fa-edit"></i> </a>
+							<button  type="submit" class="small-btn update-delete" name="delete" value="{{ comment.id }}"><i class="fas fa-trash" ></i> </button>
+							<button  type="submit" class="small-btn update-delete" name="update" value="{{ comment.id }}"> <i class="far fa-edit"></i> </button>
 						{% else %}
-							<a href="" class="small-btn "> <i class="fas fa-exclamation-circle"></i> </a>
-							<a href="" class="small-btn"><i class="fas fa-thumbs-up"></i>  </a>
+							<button  type="submit" class="small-btn" name="update"  value="{{ comment.id }}"> <i class="fas fa-exclamation-circle"></i> </button>
+							<button  type="submit" class="small-btn " name="update" value="{{ comment.id }}"> <i class="fas fa-thumbs-up"></i> </button>
 						{% endif %}
-							<a href="" class="small-btn"><i class="fas fa-reply"></i> REPLY </a>
 					{% endif %}
 				</div>
+			
 			</div>
+
 		{% endfor %}
-		
-		
+		</div>
 		
 		{% if user.is_authenticated %}
 			<div class="comment">
@@ -133,27 +132,13 @@
 							<p class="text-color-grey text-sm">post a new comment</p>
 							<p class="text-color-grey text-sm">{% now "d F Y - H:i A" %} </p>
 						</div>
-						<form method="POST">
-							{% csrf_token %}
-							{{ comment_form.content }}
-							<input type="submit" class="small-btn post-comment" value="POST">
-						</form>
-						
+						<textarea id="new-comment" class="comment-input" placeholder="write a comment" maxlength="500" required name="comment-detail" rows="3"></textarea>
+						<input id="save-comment"  type="submit" class="small-btn post-comment" value="POST">
 					</div>
-				
 				</div>
 			</div>
 		{% endif %}
-		
-		
-		
-		
-		
-		
-		
-		
 	</div>
-	
 	
 	
 	
@@ -189,7 +174,7 @@
 		url: '{% url "pages:blog:post_review" %}',
 		data: {
 			postid: $('#like-button').val(),
-			csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			csrfmiddlewaretoken: '{{ csrf_token }}',
 			action: 'post',
 			type : 'like',
 		},
@@ -209,20 +194,135 @@
 		type: 'POST',
 		url: '{% url "pages:blog:post_review" %}',
 		data: {
-			postid: $('#like-button').val(),
-			csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			postid: $('#wish-button').val(),
+			csrfmiddlewaretoken: '{{ csrf_token }}',
 			action: 'post',
-			type : 'like',
+			type : 'wish',
 		},
 		success: function (json) {
-			document.getElementById("like-count").innerHTML = json['like_count'],
-			document.getElementById("like-button").innerHTML = json['status']
+			document.getElementById("wish-button").innerHTML = json['status']
 		},
 		error: function (xhr, errmsg, err) {
 
 		}
 		});
 	})
+	
+	
+	$(document).ready(function(){
+		$('.update-delete').on('click', function(){
+			var _commentid=$(this).attr('value');
+			var _action=$(this).attr('name');
+			if (confirm('Are you sure you want to ' +_action+ ' this comment?')==true){
+				$.ajax({
+					url:'{% url "pages:blog:comment_action" %}',
+					type: "post",
+					data: {commentid:_commentid,
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						action: _action
+					},
+					dataType:"json",
+					success:function(response){
+						if(response.status=='delete'){
+							$("div").remove("#"+_commentid);
+						}
+						if(response.status=='update'){
+							var  html = '<div class="comment update" id="'+response.comment_id+'">\
+											<div class="comment-container">\
+												<div class="author-info">\
+													<img class="auth-picture" src='+response.user_pic+'>\
+												</div>\
+											<div class="comment-info">\
+												<div class="comment-info-flex">\
+													<p class="text-color-grey text-sm"><strong>Update comment<strong></p>\
+													<p class="text-color-grey text-sm">now </p>\
+												</div>\
+												<textarea id="new-comment" class="comment-input"  maxlength="500" required name="comment-detail" rows="3">'+response.content+'</textarea>\
+												<button id="update-comment" type="submit" class="small-btn post-comment" value="UPDATE">UPDATE</button>\
+											</div>\
+											</div>\
+										</div> ';
+										$('.comment-wraper').prepend(html);	
+									}		
+						}
+					
+				})			
+			}
+		});
+		
+	});
+	
+	$(document).on('click', '#update-comment', function (e) {
+		e.preventDefault();
+		var comment_id = $("div[class='comment update']").attr("id");
+		var new_content= $("textarea[id='new-comment']").val();
+		console.log(comment_id, new_content);
+		$.ajax({
+			url:'{% url "pages:blog:comment_action" %}',
+				type:"post",
+				data : {commentid: comment_id,
+						new_content: new_content,
+						action:"save_updated_comment",
+						csrfmiddlewaretoken:"{{csrf_token}}"
+	
+				},
+				dataType: "json",
+				success:function(response){
+					if(response.status==true){
+						location.reload();
+					}
+					
+				}
+		})
+	})
+	
+	$(document).ready(function(){
+		$('#save-comment').on('click', function(){
+			var _comment = $('#new-comment').val();
+			var _postid = {{ post.id }};
+			console.log(_comment, _postid);
+			$.ajax({
+				url:'{% url "pages:blog:comment_action" %}',
+				type:"post",
+				data : {postid: _postid,
+						content: _comment,
+						csrfmiddlewaretoken:"{{csrf_token}}"
+				},
+				dataType: "json",
+				success:function(response){
+					if(response.status==true){
+						$('#new-comment').val('');
+						var _html= '<div class="comment animate__animated animate__bounce">\
+				<div class="comment-container ">\
+					<div class="author-info">\
+						<img class="auth-picture" src='+response.user_pic+'>\
+					</div>\
+					<div class="comment-info">\
+						<div class="comment-info-flex">\
+							<div class="flex-row">\
+								<p class="text-color-grey text-sm">'+response.username+'</p>\
+								<p class="text-ss text-color-grey mg-lt-1">just now</p>\
+							</div>\
+							<p class="text-color-grey text-sm">{{ comment.time_since }} </p>\
+						</div>\
+						<p class="text-color-greydark text-sm-bold mg-tp-05">'+response.content+' </p>\
+					</div>\
+				</div>\
+				<div class="comment-actions">\
+					<button  type="submit" class="small-btn update-delete" name="delete" value="{{ comment.id }}"><i class="fas fa-trash" ></i> </button>\
+					<button  type="submit" class="small-btn update-delete" name="update" value="{{ comment.id }}"> <i class="far fa-edit"></i> </button>\
+				</div>';
+				
+				$('.comment-wraper').append(_html);
+			}
+				}
+			});
+		});
+		
+	});
+	
+	
+	
 	</script>
 	
 	
