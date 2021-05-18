@@ -288,9 +288,9 @@
 
 .post-container{
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 8px 8px 10px 0px rgba(0, 0, 0, 0.11);
-    border: 1px solid rgba(73, 73, 73, 0.26);
+    border-radius: 2px;
+    /* box-shadow: 8px 8px 10px 0px rgba(0, 0, 0, 0.11); */
+    /* border: 1px solid rgba(73, 73, 73, 0.26); */
 }
 
 .author-view {
@@ -329,12 +329,13 @@
     padding: 0.4rem 0.8rem;
     border-top: 1px solid rgba(204, 204, 204, 0.527);
     display: flex;
+    justify-content: space-between;
 
 }
 
 .action-post{
-    margin-right: 10px;
-    margin-left: 30%;    
+
+    
 }
 
 
@@ -384,11 +385,11 @@
 .comment {
     background-color: rgb(255, 255, 255);
     padding: 0.2rem 1rem;
-    margin-left:auto;
+    margin-left:0;
     margin-right:auto;
     border-radius: 4px;
     margin-top: 1rem;
-    width: 100%;
+    width: 80%;
     
 }
 
@@ -398,6 +399,7 @@
     align-items: top;
     padding: 0.1rem 1rem;
     border-radius: 4px;
+   
    
 }
 .comment-container .author-info {
@@ -428,6 +430,7 @@
 }
 
 .comment-actions {
+    padding-right: 1rem;
     display: flex;
     justify-content: flex-end;
 
@@ -453,7 +456,7 @@
 	font-weight: 400;
 	font-size: 13px;
     padding: 0.4rem 0.8rem;
-    border-radius: 6px;
+    border-radius: 2px;
     resize: none;
 
 }

@@ -42,15 +42,19 @@
 				<p class="text-color-greydark text-ms spaced-lines-12"> {{ post.content }}</p>
 			</div>
 			<div class="post-detail">
-				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-comment-alt text-color-red"></i>  {{ post.number_comments }} comments </p>
-				<p  class="text-sm post-thumbnails text-color-greydark"><i class="far fa-clock text-color-red"></i> {{ post.last_updated|date:'d F Y - h:i A'}}  </p>
-				<p class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-thumbs-up text-color-red"></i> <span id="like-count"> {{ post.number_likes }}</span>  </p>
-				<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-tags text-color-red"></i> {{ post.tags.all.count }} tags  </p>
 				<div class="flex-row">
-						{% for tag in post.tags.all %}
-						<a href="" class="btn-small mg-lt-05">{{ tag.name }}</a>
-						{% endfor %}
+					<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-comment-alt text-color-red"></i>  {{ post.number_comments }} comments </p>
+					<p  class="text-sm post-thumbnails text-color-greydark"><i class="far fa-clock text-color-red"></i> {{ post.last_updated|date:'d F Y - h:i A'}}  </p>
+					<p class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-thumbs-up text-color-red"></i> <span id="like-count"> {{ post.number_likes }}</span>  </p>
+					<p  class="text-sm post-thumbnails text-color-greydark"><i class="fas fa-tags text-color-red"></i> {{ post.tags.all.count }} tags  </p>
+					<div class="flex-row">
+							{% for tag in post.tags.all %}
+							<a href="" class="btn-small mg-lt-05">{{ tag.name }}</a>
+							{% endfor %}
+					</div>
+
 				</div>
+				
 				<div class="action-post">
 					<button class="btn-small mg-lt-05"  id='like-button' value="{{ post.id }}">LIKE</button>
 					<button class="btn-small mg-lt-05"  id='wish-button' value="{{ post.id }}">READ LATER</button>
@@ -59,29 +63,6 @@
 
 			</div>
 		</div>
-		{% if update_comment_form %}
-			<div class="comment">
-				<div class="comment-container">
-					<div class="author-info">
-						<img class="auth-picture" src="{% static 'images/default_prof_pic.jpg' %}">
-					</div>
-					<div class="comment-info">
-						<div class="comment-info-flex">
-							<p class="text-color-grey text-sm">update your comment</p>
-							<p class="text-color-grey text-sm">{% now "d F Y - H:i A" %} </p>
-						</div>
-						<form method="POST" action="{{ comment.action_url}}">
-							{% csrf_token %}
-							{{ update_comment_form.content }}
-							<input type="hidden" name="perform" value="update">
-							<input type="submit" class="small-btn post-comment" value="UPDATE">
-						</form>
-						
-					</div>
-				
-				</div>
-			</div>
-		{% endif %}
 		
 		<div class="comment-wraper">
 		{% for comment in comments %}
@@ -108,7 +89,7 @@
 					{% if user.is_authenticated %}
 						{% if comment.user == request.user %}
 							<button  type="submit" class="small-btn update-delete" name="delete" value="{{ comment.id }}"><i class="fas fa-trash" ></i> </button>
-							<button  type="submit" class="small-btn update-delete" name="update" value="{{ comment.id }}"> <i class="far fa-edit"></i> </button>
+							<button  type="submit" class="small-btn update-delete" name="put" value="{{ comment.id }}"> <i class="far fa-edit"></i> </button>
 						{% else %}
 							<button  type="submit" class="small-btn" name="update"  value="{{ comment.id }}"> <i class="fas fa-exclamation-circle"></i> </button>
 							<button  type="submit" class="small-btn " name="update" value="{{ comment.id }}"> <i class="fas fa-thumbs-up"></i> </button>
@@ -130,7 +111,7 @@
 					<div class="comment-info">
 						<div class="comment-info-flex">
 							<p class="text-color-grey text-sm">post a new comment</p>
-							<p class="text-color-grey text-sm">{% now "d F Y - H:i A" %} </p>
+							<p class="text-color-grey text-sm"> </p>
 						</div>
 						<textarea id="new-comment" class="comment-input" placeholder="write a comment" maxlength="500" required name="comment-detail" rows="3"></textarea>
 						<input id="save-comment"  type="submit" class="small-btn post-comment" value="POST">
@@ -208,26 +189,26 @@
 		});
 	})
 	
-	
+	// this ajax sends a request for deleting or updating an comment
 	$(document).ready(function(){
 		$('.update-delete').on('click', function(){
 			var _commentid=$(this).attr('value');
 			var _action=$(this).attr('name');
 			if (confirm('Are you sure you want to ' +_action+ ' this comment?')==true){
 				$.ajax({
-					url:'{% url "pages:blog:comment_action" %}',
-					type: "post",
-					data: {commentid:_commentid,
+					url:'{% url "api:comment-action" %}',
+					type: _action,
+					data: {id:_commentid,
 						csrfmiddlewaretoken: '{{ csrf_token }}',
 						action: _action
 					},
 					dataType:"json",
 					success:function(response){
-						if(response.status=='delete'){
+						if(response.status=='deleted'){
 							$("div").remove("#"+_commentid);
 						}
-						if(response.status=='update'){
-							var  html = '<div class="comment update" id="'+response.comment_id+'">\
+						else{
+							var  html = '<div class="comment update" id="'+response.id+'">\
 											<div class="comment-container">\
 												<div class="author-info">\
 													<img class="auth-picture" src='+response.user_pic+'>\
@@ -251,20 +232,18 @@
 		});
 		
 	});
-	
+	// this updates a comment on page
 	$(document).on('click', '#update-comment', function (e) {
 		e.preventDefault();
 		var comment_id = $("div[class='comment update']").attr("id");
 		var new_content= $("textarea[id='new-comment']").val();
-		console.log(comment_id, new_content);
 		$.ajax({
-			url:'{% url "pages:blog:comment_action" %}',
-				type:"post",
-				data : {commentid: comment_id,
-						new_content: new_content,
-						action:"save_updated_comment",
+			url:'{% url "api:comment-action" %}',
+				type:"patch",
+				data : {id: comment_id,
+						content: new_content,
+						user: {{user.id}},
 						csrfmiddlewaretoken:"{{csrf_token}}"
-	
 				},
 				dataType: "json",
 				success:function(response){
@@ -275,24 +254,25 @@
 				}
 		})
 	})
-	
+
 	$(document).ready(function(){
 		$('#save-comment').on('click', function(){
 			var _comment = $('#new-comment').val();
 			var _postid = {{ post.id }};
-			console.log(_comment, _postid);
+			var _userid = {{ user.id }};
 			$.ajax({
-				url:'{% url "pages:blog:comment_action" %}',
+				url:'{% url "api:comment-action" %}',
 				type:"post",
-				data : {postid: _postid,
+				data : {user: _userid,
+						post: _postid,
 						content: _comment,
 						csrfmiddlewaretoken:"{{csrf_token}}"
 				},
 				dataType: "json",
-				success:function(response){
-					if(response.status==true){
+				success:function(response, status){
+					if(status=="success"){
 						$('#new-comment').val('');
-						var _html= '<div class="comment animate__animated animate__bounce">\
+						var _html= '<div class="comment animate__animated animate__bounce" id='+response.id+'>\
 				<div class="comment-container ">\
 					<div class="author-info">\
 						<img class="auth-picture" src='+response.user_pic+'>\
@@ -300,8 +280,8 @@
 					<div class="comment-info">\
 						<div class="comment-info-flex">\
 							<div class="flex-row">\
-								<p class="text-color-grey text-sm">'+response.username+'</p>\
-								<p class="text-ss text-color-grey mg-lt-1">just now</p>\
+								<p class="text-color-grey text-sm">'+response.user_name+'</p>\
+								<p class="text-ss text-color-grey mg-lt-1">on '+response.pub_date+'</p>\
 							</div>\
 							<p class="text-color-grey text-sm">{{ comment.time_since }} </p>\
 						</div>\
