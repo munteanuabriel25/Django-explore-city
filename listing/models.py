@@ -57,7 +57,14 @@ class Listing(models.Model):
     
     def __str__(self):
         return self.name
-    
+
+    def wishlist_status(self, user):
+        if self.wishlist.filter(id=user.id).exists():
+            return True
+        else:
+            return False
+        
+        
     # def get_absolute_url(self):
     #     return reverse("listing:show-listing", args=[self.category_id, self.id])
     

@@ -15,7 +15,7 @@
 		<p class="text-xl  "> Blog Posts </p>
 	</div>
 	<form method="GET" action="{% url 'pages:blog:home-view' %}" class="search-form">
-		
+<!--		{% csrf_token %}-->
 		<div class="search-input">
 			<i class="fas fa-search form-icon"></i>
 			<input type="search" name="title" placeholder="Post Title">

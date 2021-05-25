@@ -20,6 +20,7 @@ class SearchForm(forms.Form):
         query = Post.objects.filter(Q(title__icontains=data['title']),
                                     Q(user__username__icontains=data['author']),
                                     Q(tags__name__icontains=data['tag']))
+        print(query)
         return query
     # Q(title__icontains=data['title']) | Q(user_username__useprofile__username__icontains=data['author'])
     

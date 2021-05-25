@@ -34,6 +34,20 @@ class HomeBlog(View):
         context = {"posts": posts}
         return render(request, 'blog/blog_listing.html', context)
 
+    def post(self, request):
+        # check if it's a search GET request from form. If it is, then make DB queries
+        print(request.POST)
+        if request.POST.get('search') == 'search':
+            form = SearchForm(request.GET)
+            if form.is_valid():
+                posts = form.return_query()
+                context = {"posts": posts}
+                return render(request, 'blog/blog_listing.html', context)
+        # if is not a search GET request, return all posts
+    
+        context = {" ": ""}
+        return render(request, 'blog/blog_listing.html', context)
+
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)

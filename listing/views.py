@@ -57,7 +57,7 @@ class WishlistAction(View):
             listing.wishlist.remove(request.user)
         else:
             listing.wishlist.add(request.user)
-
+    
 
 
 def rating_action(request, listing_id):

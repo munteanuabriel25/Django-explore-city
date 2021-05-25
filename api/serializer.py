@@ -8,27 +8,25 @@ from datetime import datetime
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserProfile
         fields= '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email', "userprofile"]
+        extra_kwargs = {'password': {'write_only': True},
+                        'email': {'write_only': True}}
 
 
 class ListingCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ListingCategory
         fields = '__all__'
-
-class UserSerializer(serializers.ModelSerializer):
-    userprofile=UserProfileSerializer(read_only=True)
-    class Meta :
-        model = User
-        fields = ['username','password','email',"userprofile"]
-        extra_kwargs = {'password': {'write_only': True},
-                        'email': {'write_only': True}}
-        
-        
-        
+    
     def create(self, validated_data):
         user = User(email=validated_data['email'],
                     username=validated_data['username'])
@@ -37,11 +35,15 @@ class UserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
 
+
+
 class ListingSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True, required=False)
+    
     class Meta:
         model = Listing
         fields ='__all__'
+
+
 
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, required=False)
@@ -52,7 +54,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user_pic  = serializers.SerializerMethodField()
+    user_pic = serializers.SerializerMethodField()
     user_name = serializers.SerializerMethodField()
     pub_date = serializers.SerializerMethodField()
     
@@ -70,3 +72,16 @@ class CommentSerializer(serializers.ModelSerializer):
     
     def get_user_name(self, obj):
         return obj.user.userprofile.username
+    
+    
+
+class ListingWishListSerializer(serializers.Serializer):
+
+    user_id= serializers.IntegerField(required=True)
+    listing_id = serializers.IntegerField(required=True)
+    
+
+
+    
+
+    

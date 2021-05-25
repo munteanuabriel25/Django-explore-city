@@ -86,9 +86,12 @@
 									{% endblock  %}
 								</div>
 								<div class="wishlist-container">
+
+
 									{% block wishlist_action_status %}
 										{% is_into_wishlist listing user %}
 									{% endblock %}
+
 								</div>
 							</div>
 						</div>
@@ -108,4 +111,51 @@
 			</div>
 		</div>
 	</section>
+
+
+
+
+	<script>
+
+	
+			$(document).on('click', '.listing-like', function (e) {
+			var is_logged_in = '{{user.is_authenticated}}';
+			if(is_logged_in==true){
+				var listing_id = $(this).attr('value')
+				e.preventDefault();
+				$.ajax({
+					type: 'POST',
+					url : '{% url "api:wishlist-action" %}',
+					data: {
+						user_id: "{{ user.id }}",
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						listing_id: listing_id,
+						},
+					dataType: "json",
+					success: function (response) {
+						document.getElementById(listing_id).innerHTML = response['text']
+					},
+					error: function (xhr, errmsg, err) { }
+		
+				});
+			}else {
+				alert("You must be authenticated in order to perform this action");
+			}
+			})	
+
+		
+
+	
+		
+			
+	
+	</script>
+
+
+
+
+
+
+
+
 {% endblock %}
